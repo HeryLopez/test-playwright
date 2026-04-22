@@ -8,7 +8,13 @@ The answer this POC proposes: record the Playwright test runs as videos and atta
 
 The editor itself is a React + Vite app with React Router. Users build page layouts by dragging block components onto a canvas, configuring properties via a side panel, and previewing the result.
 
+
+| Editor | Preview |
+|--------|---------|
+| <img alt="Editor" src="https://github.com/user-attachments/assets/1da0f888-2c2d-415f-92f3-de60f723732f" /> | <img alt="Preview" src="https://github.com/user-attachments/assets/a5e1b053-c9ac-496e-927e-30e63c4b2580" /> |
+
 ---
+
 
 ## Architecture: Domain-Driven Design (DDD)
 
@@ -103,6 +109,9 @@ The workflow is automated via `.github/workflows/playwright.yml`. On every push 
 4. **The comment is sticky** — it updates in place on each new push to the same PR instead of creating a new comment every time.
 
 Reviewers get evidence-based verification of every change without leaving the PR. If a component breaks, the failing test, its duration, and the recorded video are immediately visible in the artifacts.
+
+<img width="875" alt="PR comment with test results" src="https://github.com/user-attachments/assets/f37fbb96-b775-4f82-ba7b-a582e9182bf1" />
+
 
 ### Manually (local)
 
