@@ -9,10 +9,10 @@ function ResultPage() {
   if (!data) {
     return (
       <div className="result-container">
-        <h1>Sin datos</h1>
-        <p>No se han enviado datos del formulario.</p>
+        <h1>No Data</h1>
+        <p>No form data has been submitted.</p>
         <button className="back-btn" onClick={() => navigate('/')}>
-          Volver al formulario
+          Back to form
         </button>
       </div>
     )
@@ -20,27 +20,27 @@ function ResultPage() {
 
   return (
     <div className="result-container">
-      <h1>Datos Recibidos</h1>
+      <h1>Received Data</h1>
       <div className="data-card" data-testid="result-card">
         <div className="data-row">
-          <span className="label">Nombre:</span>
-          <span data-testid="result-nombre">{data.nombre}</span>
+          <span className="label">Name:</span>
+          <span data-testid="result-name">{data.name}</span>
         </div>
         <div className="data-row">
           <span className="label">Email:</span>
           <span data-testid="result-email">{data.email}</span>
         </div>
         <div className="data-row">
-          <span className="label">Edad:</span>
-          <span data-testid="result-edad">{data.edad}</span>
+          <span className="label">Age:</span>
+          <span data-testid="result-age">{data.age}</span>
         </div>
         <div className="data-row">
-          <span className="label">Mensaje:</span>
-          <span data-testid="result-mensaje">{data.mensaje}</span>
+          <span className="label">Message:</span>
+          <span data-testid="result-message">{data.message}</span>
         </div>
       </div>
       <button className="back-btn" onClick={() => navigate('/')}>
-        Volver al formulario
+        Back to form
       </button>
     </div>
   )

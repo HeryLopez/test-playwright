@@ -1,0 +1,36 @@
+.spacer-block {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #ced4da;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 6px,
+    rgba(0, 0, 0, 0.03) 6px,
+    rgba(0, 0, 0, 0.03) 12px
+  );
+  cursor: grab;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.spacer-block--selected {
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.spacer-block--preview {
+  cursor: default;
+  border: none;
+  background: none;
+}
+
+.spacer-block__label {
+  font-size: 11px;
+  color: #adb5bd;
+  pointer-events: none;
+  user-select: none;
+}
