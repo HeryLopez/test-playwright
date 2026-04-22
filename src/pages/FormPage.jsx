@@ -39,7 +39,7 @@ function FormPage() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Email 2</label>
           <input
             type="email"
             id="email"
