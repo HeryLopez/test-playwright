@@ -58,7 +58,7 @@ jobs:
           md += '### Test Details\n\n';
           details.forEach(d => md += '- ' + d + '\n');
           md += '\n---\n';
-          md += '📦 [**Ver Reporte Completo con Videos**](https://github.com/' + process.env.GITHUB_REPOSITORY + '/actions/runs/' + process.env.GITHUB_RUN_ID + '#artifacts)\n';
+          md += '📦 [**View Full Report with Videos**](https://github.com/' + process.env.GITHUB_REPOSITORY + '/actions/runs/' + process.env.GITHUB_RUN_ID + '#artifacts)\n';
           fs.writeFileSync('test-results/summary.md', md);
           "
       - name: Comment PR with results
