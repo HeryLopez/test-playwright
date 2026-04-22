@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import buttonBlock from '../domains/block-button'
 import spacerBlock from '../domains/block-spacer'
 import textBlock from '../domains/block-text'
 import { Canvas, useCanvas } from '../domains/canvas'
@@ -6,7 +7,7 @@ import { ComponentPalette } from '../domains/palette'
 import { PropertiesPanel } from '../domains/properties'
 import './EditorPage.css'
 
-const BLOCKS = [textBlock, spacerBlock]
+const BLOCKS = [textBlock, spacerBlock, buttonBlock]
 const BLOCKS_MAP = Object.fromEntries(BLOCKS.map((b) => [b.type, b]))
 
 function EditorPage() {
@@ -25,7 +26,7 @@ function EditorPage() {
   return (
     <div className="editor-layout">
       <header className="editor-header">
-        <h1 className="editor-header-title">Home Editor</h1>
+        <h1 className="editor-header-title">Content Editor</h1>
         <button
           className="editor-preview-btn"
           onClick={() => navigate('/preview', { state: { components } })}

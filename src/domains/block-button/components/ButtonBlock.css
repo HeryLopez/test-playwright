@@ -1,0 +1,65 @@
+/* wrapper */
+.btn-block {
+  width: 100%;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  border: 1px dashed #ced4da;
+  border-radius: 4px;
+  cursor: grab;
+  line-height: normal;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: flex;
+}
+
+.btn-block:hover { border-color: #868e96; }
+.btn-block:active { cursor: grabbing; }
+
+.btn-block--selected {
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+.btn-block--preview {
+  cursor: default;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* alignment */
+.btn-block--align-left   { justify-content: flex-start; }
+.btn-block--align-center { justify-content: center; }
+.btn-block--align-right  { justify-content: flex-end; }
+
+/* the actual button */
+.btn-block__btn {
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  border: none;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  pointer-events: none; /* clicks handled by wrapper in editor */
+}
+
+/* sizes */
+.btn-block__btn--small  { font-size: 12px; padding: 6px 14px; }
+.btn-block__btn--medium { font-size: 14px; padding: 9px 20px; }
+.btn-block__btn--large  { font-size: 16px; padding: 12px 28px; }
+
+/* variants */
+.btn-block__btn--primary {
+  background: #4361ee;
+  color: #fff;
+}
+
+.btn-block__btn--secondary {
+  background: #6c757d;
+  color: #fff;
+}
+
+.btn-block__btn--outline {
+  background: transparent;
+  color: #4361ee;
+  border: 2px solid #4361ee;
+  pointer-events: none;
+}

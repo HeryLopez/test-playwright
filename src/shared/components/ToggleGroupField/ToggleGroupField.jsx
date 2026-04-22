@@ -2,13 +2,13 @@ import IconButton from '../IconButton/IconButton'
 import '../field.css'
 
 /**
- * AlignmentField — label + row of IconButton toggles for text alignment.
+ * ToggleGroupField — label + row of IconButton toggles for any option set.
  *
  * Props:
- *   label   {string}    default: 'Alignment'
- *   value   {string}    current alignment value, e.g. 'left'
+ *   label   {string}    default: 'Options'
+ *   value   {string}    currently selected value
  *   options {Array<{ value, label, icon }>}  defaults to left/center/right
- *   onChange {function} receives the selected alignment string
+ *   onChange {function} receives the selected value string
  *   testId  {string}
  */
 
@@ -18,11 +18,11 @@ const DEFAULT_OPTIONS = [
   { value: 'right',  label: 'Right',  icon: '➡' },
 ]
 
-function AlignmentField({ label = 'Alignment', value, options = DEFAULT_OPTIONS, onChange, testId }) {
+function ToggleGroupField({ label = 'Options', value, options = DEFAULT_OPTIONS, onChange, testId }) {
   return (
     <div className="field-group">
       <label>{label}</label>
-      <div className="field-align-group" data-testid={testId}>
+      <div className="field-toggle-group" data-testid={testId}>
         {options.map((option) => (
           <IconButton
             key={option.value}
@@ -39,4 +39,4 @@ function AlignmentField({ label = 'Alignment', value, options = DEFAULT_OPTIONS,
   )
 }
 
-export default AlignmentField
+export default ToggleGroupField

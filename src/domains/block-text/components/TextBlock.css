@@ -1,11 +1,12 @@
 .text-block {
   width: 100%;
-  padding: 10px 14px;
+  padding: 10px 10px;
   background: transparent;
   border: 1px dashed #ced4da;
   border-radius: 4px;
   cursor: grab;
   box-sizing: border-box;
+  line-height: normal;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 

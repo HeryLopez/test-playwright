@@ -1,17 +1,16 @@
 .canvas {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  display: block;
   background: #f0f2f5;
   background-image: radial-gradient(#c8cdd4 1px, transparent 1px);
   background-size: 20px 20px;
   overflow-y: auto;
   padding: 16px;
-  gap: 0;
+  box-sizing: border-box;
 }
 
 .canvas-empty {
-  flex: 1;
+  min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
   justify-content: center;

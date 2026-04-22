@@ -36,11 +36,11 @@
   cursor: pointer;
 }
 
-.field-align-group {
+.field-toggle-group {
   display: flex;
   gap: 6px;
 }
 
-.field-align-group .icon-btn {
+.field-toggle-group .icon-btn {
   flex: 1;
 }

@@ -1,4 +1,4 @@
-import { AlignmentField, ColorField, NumberField, TextField } from '../../../shared/components'
+import { ColorField, NumberField, TextField, ToggleGroupField } from '../../../shared/components'
 
 function TextBlockFields({ props, onChange }) {
   return (
@@ -30,7 +30,7 @@ function TextBlockFields({ props, onChange }) {
         testId="prop-color"
       />
 
-      <AlignmentField
+      <ToggleGroupField
         value={props.textAlign}
         onChange={(val) => onChange({ textAlign: val })}
         testId="prop-textAlign"
