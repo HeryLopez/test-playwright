@@ -208,26 +208,24 @@ test.describe("Home Editor", () => {
     await expect(page).toHaveURL("/");
   });
 
-  test("should load the demo homepage and preview all block types", async ({
+  test("should load the demo homepage, interact with carousels and scroll to bottom", async ({
     page,
   }) => {
     await page.goto("/");
     await page.waitForTimeout(DELAY);
 
-    // --- Step 1: Open JSON / Import modal ---
+    // --- Step 1: Open Import modal ---
     await page.locator('[data-testid="io-btn"]').click();
     await page.waitForTimeout(DELAY);
     await expect(page.locator('[data-testid="ie-modal"]')).toBeVisible();
 
-    // Switch to Import tab
     await page.getByRole("button", { name: "Import" }).click();
     await page.waitForTimeout(DELAY);
 
     // --- Step 2: Load the demo content ---
     await page.locator('[data-testid="load-demo-btn"]').click();
-    await page.waitForTimeout(800); // wait for fetch + textarea fill
+    await page.waitForTimeout(800);
 
-    // Confirm the textarea has JSON content
     const importInput = page.locator('[data-testid="import-json-input"]');
     await expect(importInput).not.toHaveValue("");
 
@@ -235,55 +233,147 @@ test.describe("Home Editor", () => {
     await page.locator('[data-testid="import-json-btn"]').click();
     await page.waitForTimeout(800);
 
-    // Modal should be gone, canvas should have items
     await expect(page.locator('[data-testid="ie-modal"]')).not.toBeVisible();
     await expect(
       page.locator('[data-testid="canvas-item"]').first(),
     ).toBeVisible();
 
-    // Brief pause so the editor with all components is visible in the video
-    await page.waitForTimeout(1000);
+    // --- Step 4: Scroll the editor canvas to show loaded content ---
+    const canvas = page.locator('[data-testid="editor-canvas"]');
+    await canvas.evaluate((el) =>
+      el.scrollTo({ top: 400, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(700);
+    await canvas.evaluate((el) =>
+      el.scrollTo({ top: 900, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(700);
+    await canvas.evaluate((el) => el.scrollTo({ top: 0, behavior: "smooth" }));
+    await page.waitForTimeout(500);
 
-    // --- Step 4: Navigate to Preview ---
+    // --- Step 5: Navigate to Preview ---
     await page.locator('[data-testid="preview-btn"]').click();
     await page.waitForURL("**/preview");
     await page.waitForTimeout(800);
 
-    // First preview item should be visible
     await expect(
       page.locator('[data-testid="preview-item"]').first(),
     ).toBeVisible();
 
-    // --- Step 5: Scroll through the entire preview slowly ---
-    // Scroll in increments so the video shows each section clearly
-    const scrollHeight = await page.evaluate(
-      () => document.documentElement.scrollHeight,
+    const scroller = page.locator(".preview-layout-root");
+
+    // --- Step 6: Interact with carousel 1 (Block Types showcase) ---
+    const carousel1 = page.locator("[data-carousel-block]").first();
+    await carousel1.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(700);
+
+    const next1 = page.locator('[data-testid="carousel-btn-next"]').first();
+    const prev1 = page.locator('[data-testid="carousel-btn-prev"]').first();
+
+    await next1.click();
+    await page.waitForTimeout(450);
+    await next1.click();
+    await page.waitForTimeout(450);
+    await next1.click();
+    await page.waitForTimeout(450);
+    await next1.click(); // wraps to last slide
+    await page.waitForTimeout(450);
+    await prev1.click();
+    await page.waitForTimeout(450);
+    await prev1.click();
+    await page.waitForTimeout(700);
+
+    // --- Step 7: Scroll through the Features section ---
+    await scroller.evaluate((el) =>
+      el.scrollBy({ top: el.clientHeight * 0.85, behavior: "smooth" }),
     );
-    const viewportHeight = page.viewportSize().height;
-    const steps = Math.ceil(scrollHeight / viewportHeight);
+    await page.waitForTimeout(700);
+    await scroller.evaluate((el) =>
+      el.scrollBy({ top: el.clientHeight * 0.85, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(700);
 
-    for (let i = 1; i <= steps; i++) {
-      await page.evaluate(
-        (y) => window.scrollTo({ top: y, behavior: "smooth" }),
-        i * viewportHeight * 0.8,
-      );
-      await page.waitForTimeout(700); // pause on each section
-    }
+    // --- Step 8: Interact with carousel 2 (Gallery / Screenshots) ---
+    const carousel2 = page.locator("[data-carousel-block]").nth(1);
+    await carousel2.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(700);
 
-    // Pause at the bottom so the footer is visible in the video
-    await page.waitForTimeout(1000);
+    const next2 = page.locator('[data-testid="carousel-btn-next"]').nth(1);
+    const prev2 = page.locator('[data-testid="carousel-btn-prev"]').nth(1);
 
-    // --- Step 6: Scroll back to the top ---
-    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+    await next2.click();
+    await page.waitForTimeout(450);
+    await next2.click();
+    await page.waitForTimeout(450);
+    await next2.click();
+    await page.waitForTimeout(450);
+    await prev2.click();
+    await page.waitForTimeout(700);
+
+    // --- Step 9: Scroll through How it Works ---
+    await scroller.evaluate((el) =>
+      el.scrollBy({ top: el.clientHeight * 0.85, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(700);
+    await scroller.evaluate((el) =>
+      el.scrollBy({ top: el.clientHeight * 0.85, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(700);
+    await scroller.evaluate((el) =>
+      el.scrollBy({ top: el.clientHeight * 0.85, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(700);
+
+    // --- Step 10: Interact with carousel 3 (Templates) ---
+    const carousel3 = page.locator("[data-carousel-block]").nth(2);
+    await carousel3.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(700);
+
+    const next3 = page.locator('[data-testid="carousel-btn-next"]').nth(2);
+
+    await next3.click();
+    await page.waitForTimeout(450);
+    await next3.click();
+    await page.waitForTimeout(450);
+    await next3.click();
+    await page.waitForTimeout(700);
+
+    // --- Step 11: Scroll to bottom (Testimonials → Pricing → CTA → Footer) ---
+    await scroller.evaluate((el) =>
+      el.scrollBy({ top: el.clientHeight * 0.85, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(700);
+    await scroller.evaluate((el) =>
+      el.scrollBy({ top: el.clientHeight * 0.85, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(700);
+    await scroller.evaluate((el) =>
+      el.scrollBy({ top: el.clientHeight * 0.85, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(700);
+
+    // Snap to the very bottom so the footer is fully visible
+    await scroller.evaluate((el) =>
+      el.scrollTo({ top: el.scrollHeight, behavior: "smooth" }),
+    );
+    await page.waitForTimeout(1200);
+
+    // --- Step 12: Verify content ---
+    const itemCount = await page.locator('[data-testid="preview-item"]').count();
+    expect(itemCount).toBeGreaterThan(10);
+
+    const carouselCount = await page
+      .locator("[data-carousel-block]")
+      .count();
+    expect(carouselCount).toBe(3);
+
+    // --- Step 13: Scroll back to top ---
+    await scroller.evaluate((el) =>
+      el.scrollTo({ top: 0, behavior: "smooth" }),
+    );
     await page.waitForTimeout(800);
 
-    // --- Step 7: Verify key sections exist ---
-    const items = page.locator('[data-testid="preview-item"]');
-    await expect(items.first()).toBeVisible();
-    const count = await items.count();
-    expect(count).toBeGreaterThan(10);
-
-    // --- Step 8: Go back to editor ---
+    // --- Step 14: Back to editor ---
     await page.click("text=← Back to Editor");
     await page.waitForURL("/");
     await page.waitForTimeout(DELAY);

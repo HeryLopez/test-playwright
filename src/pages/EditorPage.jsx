@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import buttonBlock from '../domains/block-button'
+import carouselBlock from '../domains/block-carousel'
 import imageBlock from '../domains/block-image'
 import spacerBlock from '../domains/block-spacer'
 import textBlock from '../domains/block-text'
@@ -10,7 +11,7 @@ import { ComponentPalette } from '../domains/palette'
 import { PropertiesPanel } from '../domains/properties'
 import './EditorPage.css'
 
-const BLOCKS = [textBlock, imageBlock, spacerBlock, buttonBlock]
+const BLOCKS = [textBlock, imageBlock, carouselBlock, spacerBlock, buttonBlock]
 const BLOCKS_MAP = Object.fromEntries(BLOCKS.map((b) => [b.type, b]))
 
 function EditorPage() {
