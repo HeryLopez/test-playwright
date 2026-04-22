@@ -1,0 +1,159 @@
+.ie-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.ie-modal {
+  background: #fff;
+  border-radius: 8px;
+  width: 560px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color-scheme: light;
+  color: #212529;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.ie-modal__header {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  gap: 8px;
+}
+
+.ie-tabs {
+  display: flex;
+  flex: 1;
+}
+
+.ie-tab {
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #6c757d;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -1px;
+}
+
+.ie-tab:hover { color: #212529; }
+
+.ie-tab--active {
+  color: #4361ee;
+  border-bottom-color: #4361ee;
+}
+
+.ie-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.ie-close:hover { background: #f1f3f5; }
+
+.ie-modal__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.ie-hint {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 0;
+}
+
+.ie-json {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 12px;
+  font-family: ui-monospace, Consolas, monospace;
+  color: #212529;
+  overflow-y: auto;
+  max-height: 320px;
+  white-space: pre;
+  margin: 0;
+}
+
+.ie-import-actions-top {
+  display: flex;
+}
+
+.ie-btn--demo {
+  background: #f0f4ff;
+  border-color: #c7d2fe;
+  color: #4361ee;
+  font-size: 12px;
+}
+.ie-btn--demo:hover {
+  background: #e0e7ff;
+}
+
+.ie-import-input {
+  resize: vertical;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 12px;
+  padding: 10px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  outline: none;
+  color: #212529;
+  color-scheme: light;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+.ie-import-input:focus { border-color: #4361ee; }
+
+.ie-error {
+  font-size: 12px;
+  color: #dc3545;
+  margin: 0;
+}
+
+.ie-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.ie-btn {
+  padding: 7px 16px;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background: #fff;
+  color: #495057;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ie-btn:hover { background: #f8f9fa; }
+
+.ie-btn--primary {
+  background: #4361ee;
+  border-color: #4361ee;
+  color: #fff;
+}
+.ie-btn--primary:hover { background: #3451d1; border-color: #3451d1; }
+.ie-btn--primary:disabled { opacity: 0.5; cursor: not-allowed; }

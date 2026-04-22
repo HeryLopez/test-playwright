@@ -1,7 +1,6 @@
 .preview-canvas {
   display: flex;
   flex-direction: column;
-  gap: 12px;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;

@@ -20,9 +20,10 @@
 }
 
 .btn-block--preview {
-  cursor: default;
+  padding: 0;
   border-color: transparent !important;
   box-shadow: none !important;
+  cursor: default;
 }
 
 /* alignment */

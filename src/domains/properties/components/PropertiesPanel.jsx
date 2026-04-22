@@ -1,6 +1,6 @@
 import './PropertiesPanel.css'
 
-function PropertiesPanel({ component, blocks, onUpdate }) {
+function PropertiesPanel({ component, blocks, onUpdate, onDelete }) {
   if (!component) {
     return (
       <aside className="properties-panel properties-panel--empty" data-testid="properties-panel">
@@ -16,7 +16,17 @@ function PropertiesPanel({ component, blocks, onUpdate }) {
 
   return (
     <aside className="properties-panel" data-testid="properties-panel">
-      <h2 className="properties-title">Properties</h2>
+      <div className="properties-header">
+        <h2 className="properties-title">Properties</h2>
+        <button
+          className="properties-delete-btn"
+          onClick={() => onDelete(component.id)}
+          data-testid="delete-component-btn"
+          title="Delete component"
+        >
+          Delete
+        </button>
+      </div>
       <Fields
         props={component.props}
         onChange={(newProps) => onUpdate(component.id, newProps)}

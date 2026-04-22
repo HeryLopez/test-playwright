@@ -1,6 +1,6 @@
 .text-block {
   width: 100%;
-  padding: 10px 10px;
+  padding: 8px 10px;
   background: transparent;
   border: 1px dashed #ced4da;
   border-radius: 4px;
@@ -25,6 +25,7 @@
 }
 
 .text-block--preview {
+  padding: 0;
   cursor: default;
   border-color: transparent !important;
   box-shadow: none !important;

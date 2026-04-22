@@ -72,8 +72,12 @@
   margin: 0;
 }
 
+.preview-layout-root {
+  overflow-y: auto;
+  height: 100vh;
+}
+
 .preview-body {
   flex: 1;
-  overflow-y: auto;
   background: #f8f9fa;
 }

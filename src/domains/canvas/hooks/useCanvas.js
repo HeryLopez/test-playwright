@@ -77,6 +77,14 @@ export function useCanvas(blocksMap) {
     [setAndPersist],
   );
 
+  const removeComponent = useCallback(
+    (id) => {
+      setAndPersist((prev) => prev.filter((c) => c.id !== id));
+      setSelectedId((prev) => (prev === id ? null : prev));
+    },
+    [setAndPersist],
+  );
+
   const selectComponent = useCallback((id) => {
     setSelectedId(id);
   }, []);
@@ -84,6 +92,14 @@ export function useCanvas(blocksMap) {
   const deselectAll = useCallback(() => {
     setSelectedId(null);
   }, []);
+
+  const loadComponents = useCallback(
+    (newComponents) => {
+      setAndPersist(newComponents);
+      setSelectedId(null);
+    },
+    [setAndPersist],
+  );
 
   const selectedComponent = components.find((c) => c.id === selectedId) ?? null;
 
@@ -94,7 +110,9 @@ export function useCanvas(blocksMap) {
     addComponentAt,
     reorderComponent,
     updateComponent,
+    removeComponent,
     selectComponent,
     deselectAll,
+    loadComponents,
   };
 }

@@ -16,8 +16,26 @@
   gap: 16px;
 }
 
-.editor-preview-btn {
+.editor-io-btn {
   margin-left: auto;
+  background: none;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.editor-io-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.editor-preview-btn {
+  margin-left: 0;
   background: #4361ee;
   color: #fff;
   border: none;
