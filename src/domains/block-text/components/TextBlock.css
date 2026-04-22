@@ -1,0 +1,32 @@
+.text-block {
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px dashed #ced4da;
+  border-radius: 4px;
+  cursor: grab;
+  box-sizing: border-box;
+  line-height: normal;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.text-block:hover {
+  border-color: #868e96;
+}
+
+.text-block:active {
+  cursor: grabbing;
+}
+
+.text-block--selected {
+  border-color: #4361ee;
+  border-style: dashed;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+.text-block--preview {
+  padding: 0;
+  cursor: default;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}

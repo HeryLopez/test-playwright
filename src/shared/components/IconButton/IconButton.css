@@ -1,0 +1,48 @@
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background: #fff;
+  color: #495057;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.icon-btn:hover:not(.icon-btn--disabled) {
+  background: #f0f4ff;
+  border-color: #4361ee;
+  color: #4361ee;
+}
+
+.icon-btn--active {
+  background: #4361ee;
+  border-color: #4361ee;
+  color: #fff;
+}
+
+.icon-btn--active:hover {
+  background: #3451d1;
+  border-color: #3451d1;
+}
+
+.icon-btn--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.icon-btn__icon {
+  line-height: 1;
+  font-size: 13px;
+}
+
+.icon-btn__label {
+  line-height: 1;
+}

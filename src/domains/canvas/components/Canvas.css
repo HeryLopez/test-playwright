@@ -1,0 +1,47 @@
+.canvas {
+  flex: 1;
+  display: block;
+  background: #f0f2f5;
+  background-image: radial-gradient(#c8cdd4 1px, transparent 1px);
+  background-size: 20px 20px;
+  overflow-y: auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.canvas-empty {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.15s;
+}
+
+.canvas-empty--active {
+  background-color: rgba(67, 97, 238, 0.08);
+  outline: 2px dashed #4361ee;
+}
+
+.canvas-empty-label {
+  font-size: 14px;
+  color: #adb5bd;
+  border: 2px dashed #ced4da;
+  padding: 12px 24px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.drop-zone {
+  width: 100%;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  transition: height 0.1s, background-color 0.1s;
+}
+
+.drop-zone--active {
+  height: 28px;
+  background-color: rgba(67, 97, 238, 0.12);
+  border: 2px dashed #4361ee;
+}
