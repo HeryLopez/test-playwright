@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": "Test Updater",
+  "description": "When a file in src/ is saved, automatically creates or updates the corresponding Playwright e2e tests to match the code changes, then runs the test suite to verify everything passes.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*.jsx",
+      "src/**/*.js",
+      "src/**/*.css"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A file in src/ was just modified. You are a Playwright test engineer for this React project.\n\n## Your job\nRead the modified file(s), understand what changed, then update or create the corresponding Playwright e2e tests in `tests/`.\n\n## Rules\n1. Every UI change needs a test update. If a component, page, or route changes, update the corresponding test file.\n2. New pages or routes → create a new test file in `tests/` or add tests to the existing spec.\n3. Changed form fields → update selectors and assertions in the affected tests.\n4. Removed features → remove or update the tests that cover them.\n5. Keep delays for headed mode: use `page.waitForTimeout(DELAY)` (DELAY = 400ms) between actions.\n\n## Workflow\n1. Read the modified source files to understand the changes.\n2. Read existing tests in `tests/` to find what needs updating.\n3. Update or create tests to match the new behavior.\n4. Run `npx playwright test` to verify all tests pass.\n5. If a test fails, fix it and re-run until green.\n\n## Test Conventions\n- Test names in English: \"should [expected action]\"\n- Use `data-testid` attributes for element selection when available\n- Fall back to `#id`, `label`, or role-based selectors\n- Always verify navigation with `toHaveURL()` after route changes\n- Assert visible text with `toHaveText()` or `toBeVisible()`\n\n## Project Context\n- React + Vite app running on `http://localhost:5173`\n- Routes defined in `src/App.jsx` using React Router\n- Tests live in `tests/*.spec.js`\n- Playwright config: `playwright.config.js`\n\n## Output\nReport which test files were modified or created, how many tests were added/updated/removed, and the result of running `npx playwright test`."
+  }
+}

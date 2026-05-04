@@ -1,179 +1,132 @@
 /**
- * Service for extracting content from captured HTML
- * Reuses logic from ai-migration/resourceExtractorService
+ * Service for extracting content from captured HTML.
+ * Works with real data returned by the backend screenshot API.
+ * The backend (server.mjs) already extracts texts, images, colors, etc.
+ * These functions operate on that real data or on the raw HTML string.
  */
 
 /**
- * Extract all resources from a URL
- * In production, this would fetch actual HTML and parse it
+ * Detect high-level UI components from the extracted resources.
+ * Uses the real data returned by the backend instead of mocked HTML parsing.
+ *
+ * @param {Object} resources - { texts, images, videos, animations, colors, links }
+ * @returns {{ type: string, confidence: number, selector: string, description: string }[]}
  */
-export async function extractContentFromURL(url) {
-  console.log(`[ContentExtractor] Extracting content from: ${url}`)
-  
-  // Mock delay
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-  
-  // Mock extracted content (in production, parse real HTML)
-  return {
-    images: [
-      {
-        id: 'img-1',
-        url: 'https://placehold.co/800x400/667eea/ffffff/png?text=Hero+Image',
-        alt: 'Hero background image',
-        category: 'hero',
-        width: 800,
-        height: 400,
-      },
-      {
-        id: 'img-2',
-        url: 'https://placehold.co/200x200/ff6b6b/ffffff/png?text=Logo',
-        alt: 'Company logo',
-        category: 'logo',
-        width: 200,
-        height: 200,
-      },
-      {
-        id: 'img-3',
-        url: 'https://placehold.co/400x300/4ecdc4/ffffff/png?text=Feature+1',
-        alt: 'Feature illustration',
-        category: 'content',
-        width: 400,
-        height: 300,
-      },
-      {
-        id: 'img-4',
-        url: 'https://placehold.co/400x300/95e1d3/ffffff/png?text=Feature+2',
-        alt: 'Feature illustration',
-        category: 'content',
-        width: 400,
-        height: 300,
-      },
-    ],
-    texts: [
-      {
-        id: 'text-1',
-        content: 'Welcome to Our Amazing Product',
-        type: 'heading',
-        tag: 'h1',
-        context: 'Hero section main title',
-      },
-      {
-        id: 'text-2',
-        content: 'Transform your business with our innovative solutions',
-        type: 'heading',
-        tag: 'h2',
-        context: 'Hero section subtitle',
-      },
-      {
-        id: 'text-3',
-        content: 'Get started today and see results in days, not months.',
-        type: 'paragraph',
-        tag: 'p',
-        context: 'Hero section description',
-      },
-      {
-        id: 'text-4',
-        content: 'Get Started',
-        type: 'cta',
-        tag: 'button',
-        context: 'Primary CTA button',
-      },
-      {
-        id: 'text-5',
-        content: 'Learn More',
-        type: 'cta',
-        tag: 'a',
-        context: 'Secondary CTA link',
-      },
-      {
-        id: 'text-6',
-        content: 'Why Choose Us',
-        type: 'heading',
-        tag: 'h2',
-        context: 'Features section title',
-      },
-      {
-        id: 'text-7',
-        content: 'Lightning Fast Performance',
-        type: 'heading',
-        tag: 'h3',
-        context: 'Feature 1 title',
-      },
-      {
-        id: 'text-8',
-        content: 'Optimized for speed and efficiency',
-        type: 'paragraph',
-        tag: 'p',
-        context: 'Feature 1 description',
-      },
-    ],
-    colors: [
-      { hex: '#667eea', name: 'Primary Purple', usage: 'Buttons, links, accents' },
-      { hex: '#764ba2', name: 'Dark Purple', usage: 'Headings, gradients' },
-      { hex: '#ff6b6b', name: 'Accent Red', usage: 'CTAs, highlights' },
-      { hex: '#4ecdc4', name: 'Teal', usage: 'Features, icons' },
-      { hex: '#1f2937', name: 'Dark Gray', usage: 'Body text, footer' },
-    ],
-    links: [
-      { url: '/', text: 'Home', type: 'navigation' },
-      { url: '/about', text: 'About', type: 'navigation' },
-      { url: '/features', text: 'Features', type: 'navigation' },
-      { url: '/pricing', text: 'Pricing', type: 'navigation' },
-      { url: '/contact', text: 'Contact', type: 'navigation' },
-      { url: 'https://twitter.com/example', text: 'Twitter', type: 'social' },
-      { url: 'https://github.com/example', text: 'GitHub', type: 'social' },
-    ],
-  }
-}
-
-/**
- * Detect components based on HTML structure
- */
-export function detectComponents(html) {
+export function detectComponents(resources = {}) {
   const detected = []
-  
-  // Mock component detection
-  // In production, analyze actual HTML structure
-  detected.push({
-    type: 'navbar',
-    confidence: 0.95,
-    selector: 'nav.main-nav',
-    description: 'Sticky navigation bar with logo and menu items',
-  })
-  
-  detected.push({
-    type: 'hero',
-    confidence: 0.92,
-    selector: 'section.hero',
-    description: 'Hero section with background image, heading, and CTA',
-  })
-  
-  detected.push({
-    type: 'grid',
-    confidence: 0.88,
-    selector: 'section.features',
-    description: '3-column grid layout for features',
-  })
-  
-  detected.push({
-    type: 'footer',
-    confidence: 0.90,
-    selector: 'footer',
-    description: 'Footer with links and social media icons',
-  })
-  
+  const texts = resources.texts ?? []
+  const images = resources.images ?? []
+  const links = resources.links ?? []
+  const videos = resources.videos ?? []
+
+  const hasH1 = texts.some((t) => t.tag === 'h1')
+  const hasCTA = texts.some((t) => t.type === 'cta' || t.tag === 'button')
+  const hasHeroImage = images.some((img) => img.category === 'hero')
+  const hasNavLinks = links.filter((l) => l.type === 'navigation').length >= 2
+  const hasLogo = images.some((img) => img.category === 'logo')
+  const hasContentImages = images.filter((img) => img.category === 'content').length >= 2
+  const hasVideos = videos.length > 0
+
+  // Navbar: navigation links + optional logo
+  if (hasNavLinks || hasLogo) {
+    detected.push({
+      type: 'navbar',
+      confidence: hasNavLinks && hasLogo ? 0.97 : 0.80,
+      selector: 'nav, header',
+      description: `Navigation bar${hasLogo ? ' with logo' : ''}${hasNavLinks ? ` and ${links.filter((l) => l.type === 'navigation').length} nav links` : ''}`,
+    })
+  }
+
+  // Hero: H1 + CTA or hero image
+  if (hasH1 && (hasCTA || hasHeroImage)) {
+    detected.push({
+      type: 'hero',
+      confidence: hasH1 && hasCTA && hasHeroImage ? 0.95 : 0.82,
+      selector: 'section:first-of-type, .hero, [class*="hero"]',
+      description: `Hero section with${hasH1 ? ' main heading' : ''}${hasHeroImage ? ', background image' : ''}${hasCTA ? ', and CTA button' : ''}`,
+    })
+  }
+
+  // Features / grid: multiple content images
+  if (hasContentImages) {
+    detected.push({
+      type: 'grid',
+      confidence: 0.85,
+      selector: 'section, .features, [class*="feature"]',
+      description: `Content grid with ${images.filter((img) => img.category === 'content').length} images`,
+    })
+  }
+
+  // Video section
+  if (hasVideos) {
+    detected.push({
+      type: 'media',
+      confidence: 0.90,
+      selector: 'video, iframe[src*="youtube"], iframe[src*="vimeo"]',
+      description: `Media section with ${videos.length} video${videos.length > 1 ? 's' : ''}`,
+    })
+  }
+
+  // Social links → footer signal
+  const hasSocialLinks = links.some((l) => l.type === 'social')
+  if (hasSocialLinks || hasNavLinks) {
+    detected.push({
+      type: 'footer',
+      confidence: hasSocialLinks ? 0.88 : 0.70,
+      selector: 'footer, [class*="footer"]',
+      description: `Footer${hasSocialLinks ? ' with social media links' : ''}`,
+    })
+  }
+
+  // Fallback: if nothing detected, mark as generic page
+  if (detected.length === 0) {
+    detected.push({
+      type: 'page',
+      confidence: 1.0,
+      selector: 'body',
+      description: 'Generic page — no specific components detected',
+    })
+  }
+
   return detected
 }
 
 /**
- * Analyze layout structure
+ * Analyze layout structure from real extracted data.
+ *
+ * @param {Object} resources - { texts, images, links }
+ * @param {Object} structure - DOM structure stats from backend
+ * @returns {{ structure: string, sections: number, layout: string, responsive: boolean, grid: string }}
  */
-export function analyzeLayout(html) {
+export function analyzeLayout(resources = {}, structure = {}) {
+  const texts = resources.texts ?? []
+  const images = resources.images ?? []
+  const links = resources.links ?? []
+
+  const hasNav = links.some((l) => l.type === 'navigation')
+  const hasHero = texts.some((t) => t.tag === 'h1') || images.some((i) => i.category === 'hero')
+  const hasContent = images.filter((i) => i.category === 'content').length >= 2
+  const hasFooter = links.some((l) => l.type === 'social')
+
+  const sectionNames = [
+    hasNav && 'Header',
+    hasHero && 'Hero',
+    hasContent && 'Content',
+    hasFooter && 'Footer',
+  ].filter(Boolean)
+
+  const sections = sectionNames.length || Math.max(structure.headers ?? 1, 1)
+  const contentImageCount = images.filter((i) => i.category === 'content').length
+
   return {
-    structure: 'Header → Hero → Features → Footer',
-    sections: 4,
+    structure: sectionNames.length ? sectionNames.join(' → ') : 'Single page',
+    sections,
     layout: 'Single column with full-width sections',
-    responsive: true,
-    grid: '3 columns in features section',
+    responsive: true, // assume responsive — backend captures mobile viewport
+    grid: contentImageCount >= 3
+      ? `${contentImageCount}-column grid in content section`
+      : contentImageCount > 0
+        ? `${contentImageCount} content image${contentImageCount > 1 ? 's' : ''}`
+        : 'No grid detected',
   }
 }

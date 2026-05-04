@@ -1,10 +1,18 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { reportToComponents } from '../services/reportToComponentsService'
 import './ScraperReport.css'
 import ScreenshotImage from './ScreenshotImage'
 import './ScreenshotImage.css'
 
 function ScraperReport({ report, onClose }) {
+  const navigate = useNavigate()
   const [lightboxImage, setLightboxImage] = useState(null)
+
+  const handleUseReport = () => {
+    const components = reportToComponents(report)
+    navigate('/preview', { state: { components } })
+  }
 
   if (!report) return null
 
@@ -409,7 +417,7 @@ function ScraperReport({ report, onClose }) {
         <button className="scraper-action-btn scraper-btn-secondary" onClick={onClose}>
           ← Back to Input
         </button>
-        <button className="scraper-action-btn scraper-btn-primary" data-testid="use-report-btn">
+        <button className="scraper-action-btn scraper-btn-primary" onClick={handleUseReport} data-testid="use-report-btn">
           Use This Report →
         </button>
       </div>

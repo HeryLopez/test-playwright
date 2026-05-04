@@ -1,5 +1,3 @@
-import { SCREENSHOT_TYPE } from '../models/scraperModel'
-
 /**
  * Service for capturing real screenshots using local Playwright backend
  * Backend server must be running on port 3001
@@ -74,92 +72,30 @@ export async function captureScreenshots(url) {
     }
   } catch (error) {
     console.error('[ScreenshotService] Error capturing screenshots:', error)
-    
-    // Fallback to mock data if backend is not available
-    console.warn('[ScreenshotService] Falling back to mock screenshots')
-    return {
-      screenshots: generateMockScreenshots(url),
-      html: null,
-      metadata: {},
-      structure: {},
-      images: [],
-      videos: [],
-      animations: { gifs: [], cssAnimations: [], totalAnimated: 0 },
-      texts: [],
-      colors: [],
-      reportId: Date.now(),
-      url: url,
-      capturedAt: new Date().toISOString(),
+
+    // Surface a clear error so the UI can show a proper message instead of
+    // silently returning fake data that makes it look like scraping worked.
+    const isNetworkError =
+      error instanceof TypeError ||
+      error.message?.includes('fetch') ||
+      error.message?.includes('Failed to fetch') ||
+      error.message?.includes('ECONNREFUSED') ||
+      error.message?.includes('NetworkError')
+
+    if (isNetworkError) {
+      throw new Error(
+        'Cannot connect to the screenshot server. Make sure it is running with: node server.mjs'
+      )
     }
+
+    throw new Error(`Screenshot capture failed: ${error.message}`)
   }
 }
 
 /**
- * Generate mock screenshots as fallback
- */
-function generateMockScreenshots(url) {
-  const timestamp = Date.now()
-  
-  return [
-    {
-      type: SCREENSHOT_TYPE.FULL_PAGE,
-      path: `/scraping-reports/${timestamp}/full-page.png`,
-      width: 1920,
-      height: 3840,
-      section: 'Complete page',
-      url: generateFallbackImage('Complete page', 1920, 800),
-    },
-    {
-      type: SCREENSHOT_TYPE.HERO,
-      path: `/scraping-reports/${timestamp}/hero.png`,
-      width: 1920,
-      height: 1080,
-      section: 'Hero section (viewport)',
-      url: generateFallbackImage('Hero section (viewport)', 1920, 600),
-    },
-    {
-      type: SCREENSHOT_TYPE.VIEWPORT,
-      path: `/scraping-reports/${timestamp}/desktop.png`,
-      width: 1440,
-      height: 900,
-      section: 'Desktop viewport',
-      url: generateFallbackImage('Desktop viewport', 1440, 400),
-    },
-    {
-      type: SCREENSHOT_TYPE.SECTION,
-      path: `/scraping-reports/${timestamp}/mobile.png`,
-      width: 375,
-      height: 812,
-      section: 'Mobile viewport',
-      url: generateFallbackImage('Mobile viewport', 375, 400),
-    },
-  ]
-}
-
-function generateFallbackImage(section, width, height) {
-  const sectionColors = {
-    'Complete page': '667eea',
-    'Hero section (viewport)': 'ff6b6b',
-    'Desktop viewport': '4ecdc4',
-    'Mobile viewport': '95e1d3',
-  }
-  
-  const color = sectionColors[section] || '667eea'
-  const text = encodeURIComponent(section.toUpperCase())
-  
-  return `https://placehold.co/${width}x${height}/${color}/ffffff/png?text=${text}`
-}
-
-/**
- * Save screenshots to disk (mock)
- * In production, this would save actual image files
+ * Save screenshots to disk (handled by the backend server)
  */
 export async function saveScreenshots(screenshots, reportPath) {
-  console.log(`[ScreenshotService] Saving screenshots to: ${reportPath}`)
-  
-  await delay(300)
-  
-  // In production, would write files to disk
-  // For now, return paths
+  console.log(`[ScreenshotService] Screenshots saved by backend to: ${reportPath}`)
   return screenshots.map((s) => s.path)
 }

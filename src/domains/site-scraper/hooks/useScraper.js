@@ -43,12 +43,12 @@ export function useScraper() {
       }
       setProgress(60)
 
-      // Step 3: Detect components
-      const detectedComponents = detectComponents('<html>mock</html>')
+      // Step 3: Detect components from real extracted resources
+      const detectedComponents = detectComponents(extractedContent)
       setProgress(70)
 
-      // Step 4: Analyze layout
-      const layout = analyzeLayout('<html>mock</html>')
+      // Step 4: Analyze layout from real extracted resources + DOM structure
+      const layout = analyzeLayout(extractedContent, structure)
       setProgress(80)
 
       // Step 5: Generate report (now includes HTML and metadata)
@@ -100,6 +100,7 @@ export function useScraper() {
     setCurrentReport(null)
     setStatus(SCRAPER_STATUS.IDLE)
     setProgress(0)
+    setError(null)
   }
 
   return {

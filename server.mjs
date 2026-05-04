@@ -686,8 +686,6 @@ app.post('/api/screenshot', async (req, res) => {
         }))
     })
 
-    await browser.close()
-
     console.log(`[Screenshot API] Successfully captured:`)
     console.log(`  - ${screenshots.length} screenshots`)
     console.log(`  - ${images.length} images`)
@@ -696,6 +694,247 @@ app.post('/api/screenshot', async (req, res) => {
     console.log(`  - ${animations.cssAnimations.length} CSS animations`)
     console.log(`  - ${texts.length} text elements`)
     console.log(`  - ${colors.length} colors`)
+
+    // ── Section extraction ─────────────────────────────────────────────────
+    // Walk the DOM and group content into logical sections so the agent can
+    // replicate the original layout instead of inventing one.
+    console.log('[Screenshot API] Extracting sections...')
+    const sections = await page.evaluate(() => {
+      const COOKIE_RE = /awsccc|cookie|gdpr|consent|privacy-banner/i
+      const SKIP_TAGS = new Set(['script', 'style', 'noscript', 'head', 'meta', 'link'])
+
+      // ── helpers ──────────────────────────────────────────────────────────
+      function isVisible(el) {
+        const s = window.getComputedStyle(el)
+        return s.display !== 'none' && s.visibility !== 'hidden' && s.opacity !== '0'
+      }
+
+      function isCookieBanner(el) {
+        return COOKIE_RE.test(el.className + ' ' + el.id + ' ' + (el.getAttribute('data-id') || ''))
+      }
+
+      function absUrl(src) {
+        if (!src) return null
+        try { return new URL(src, location.href).href } catch { return src }
+      }
+
+      function extractText(el) {
+        return (el.textContent || '').replace(/\s+/g, ' ').trim()
+      }
+
+      function tagName(el) {
+        return el.tagName.toLowerCase()
+      }
+
+      // ── classify a candidate section root ────────────────────────────────
+      function classifySection(el) {
+        const cls = (el.className || '').toLowerCase()
+        const id  = (el.id || '').toLowerCase()
+        const hint = cls + ' ' + id
+        if (/hero|banner|jumbotron|masthead/.test(hint)) return 'hero'
+        if (/feature|benefit|highlight|capability/.test(hint)) return 'features'
+        if (/testimonial|quote|review|trust/.test(hint)) return 'testimonials'
+        if (/pricing|plan|tier/.test(hint)) return 'pricing'
+        if (/faq|question|accordion/.test(hint)) return 'faq'
+        if (/cta|call-to-action|signup|download/.test(hint)) return 'cta'
+        if (/footer/.test(hint)) return 'footer'
+        if (/nav|header/.test(hint)) return 'header'
+        if (/grid|card|gallery/.test(hint)) return 'grid'
+        return 'section'
+      }
+
+      // ── extract structured content from a section root ───────────────────
+      function extractSection(root, index) {
+        if (!isVisible(root) || isCookieBanner(root)) return null
+
+        const headings = []
+        const paragraphs = []
+        const images = []
+        const buttons = []
+        const items = [] // sub-items (feature cards, FAQ rows, etc.)
+
+        // Walk direct and shallow children
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT)
+        let node = walker.nextNode()
+        while (node) {
+          const tag = tagName(node)
+          if (SKIP_TAGS.has(tag) || isCookieBanner(node)) {
+            node = walker.nextNode()
+            continue
+          }
+          if (!isVisible(node)) { node = walker.nextNode(); continue }
+
+          if (/^h[1-6]$/.test(tag)) {
+            const text = extractText(node)
+            if (text && text.length < 300) {
+              headings.push({ tag, text, level: parseInt(tag[1]) })
+            }
+          } else if (tag === 'p') {
+            const text = extractText(node)
+            if (text && text.length > 20 && text.length < 600) {
+              paragraphs.push(text)
+            }
+          } else if (tag === 'img') {
+            const src = absUrl(node.src || node.dataset.src || node.getAttribute('data-lazy-src'))
+            if (src && node.naturalWidth > 60 && node.naturalHeight > 60) {
+              images.push({
+                src,
+                alt: node.alt || '',
+                width: node.naturalWidth || node.width || 0,
+                height: node.naturalHeight || node.height || 0,
+              })
+            }
+          } else if (tag === 'button' || (tag === 'a' && node.getAttribute('role') === 'button')) {
+            const text = extractText(node)
+            if (text && text.length < 80) buttons.push(text)
+          } else if (tag === 'video') {
+            const src = absUrl(node.src || node.querySelector('source')?.src)
+            if (src) images.push({ src, alt: 'Video', width: node.videoWidth || 0, height: node.videoHeight || 0, isVideo: true, poster: node.poster || null })
+          }
+          node = walker.nextNode()
+        }
+
+        // Deduplicate headings (some sites render the same heading 3× for animation)
+        const seenH = new Set()
+        const uniqueHeadings = headings.filter(h => {
+          const key = h.text.slice(0, 60)
+          if (seenH.has(key)) return false
+          seenH.add(key)
+          return true
+        })
+
+        // Deduplicate images by src
+        const seenI = new Set()
+        const uniqueImages = images.filter(img => {
+          if (seenI.has(img.src)) return false
+          seenI.add(img.src)
+          return true
+        })
+
+        // Skip sections with no meaningful content
+        if (!uniqueHeadings.length && !paragraphs.length && !uniqueImages.length) return null
+
+        // Detect sub-items: repeated card-like children (feature grids, FAQ, etc.)
+        const cardSelectors = [
+          '[class*="card"]', '[class*="item"]', '[class*="feature"]',
+          '[class*="tile"]', '[class*="col"]', 'li',
+        ]
+        for (const sel of cardSelectors) {
+          const cards = Array.from(root.querySelectorAll(`:scope > * > ${sel}, :scope > ${sel}`))
+            .filter(c => isVisible(c) && !isCookieBanner(c))
+          if (cards.length >= 2 && cards.length <= 20) {
+            for (const card of cards) {
+              const cardHeadings = Array.from(card.querySelectorAll('h1,h2,h3,h4,h5,h6'))
+                .map(h => ({ tag: tagName(h), text: extractText(h), level: parseInt(tagName(h)[1]) }))
+                .filter(h => h.text)
+              const cardParas = Array.from(card.querySelectorAll('p'))
+                .map(p => extractText(p)).filter(t => t.length > 10)
+              const cardImgs = Array.from(card.querySelectorAll('img'))
+                .filter(img => img.naturalWidth > 60)
+                .map(img => ({ src: absUrl(img.src), alt: img.alt || '', width: img.naturalWidth || 0, height: img.naturalHeight || 0 }))
+              const cardBtns = Array.from(card.querySelectorAll('button, a[role="button"], a[class*="btn"]'))
+                .map(b => extractText(b)).filter(t => t && t.length < 80)
+              if (cardHeadings.length || cardParas.length) {
+                items.push({
+                  headings: cardHeadings,
+                  paragraphs: cardParas.slice(0, 3),
+                  images: cardImgs.slice(0, 2),
+                  buttons: cardBtns.slice(0, 2),
+                })
+              }
+            }
+            if (items.length >= 2) break // found a good card set
+          }
+        }
+
+        return {
+          index,
+          type: classifySection(root),
+          selector: root.tagName.toLowerCase() + (root.id ? `#${root.id}` : root.className ? `.${root.className.trim().split(/\s+/)[0]}` : ''),
+          headings: uniqueHeadings.slice(0, 6),
+          paragraphs: paragraphs.slice(0, 6),
+          images: uniqueImages.slice(0, 10),
+          buttons: [...new Set(buttons)].slice(0, 4),
+          items: items.slice(0, 12), // sub-cards / feature items
+        }
+      }
+
+      // ── find section roots ────────────────────────────────────────────────
+      // Priority 1: semantic section/article/main elements
+      const semanticRoots = Array.from(
+        document.querySelectorAll('main > section, main > article, main > div > section, body > section, body > article')
+      ).filter(el => !isCookieBanner(el) && isVisible(el))
+
+      // Priority 2: large direct children of main/body if no semantic roots
+      const fallbackRoots = semanticRoots.length < 2
+        ? Array.from(document.querySelectorAll('main > div, body > div'))
+            .filter(el => !isCookieBanner(el) && isVisible(el) && el.getBoundingClientRect().height > 200)
+        : []
+
+      const roots = semanticRoots.length >= 2 ? semanticRoots : [...semanticRoots, ...fallbackRoots]
+
+      // Also always include nav/header and footer if present
+      const nav = document.querySelector('nav, header')
+      const footer = document.querySelector('footer')
+      const extra = [nav, footer].filter(Boolean).filter(el => isVisible(el) && !isCookieBanner(el))
+
+      const allRoots = [...new Set([...extra.slice(0, 1), ...roots, ...extra.slice(1)])]
+
+      return allRoots
+        .map((el, i) => extractSection(el, i))
+        .filter(Boolean)
+        .slice(0, 30) // cap at 30 sections
+    })
+
+    console.log(`[Screenshot API]   - ${sections.length} sections extracted`)
+
+    await browser.close()
+
+    // Build and persist report.json so agents can read it later
+    const report = {
+      id: `report-${timestamp}`,
+      url,
+      timestamp,
+      generatedAt: new Date(timestamp).toISOString(),
+      reportId: timestamp,
+      screenshots: screenshots.map((s) => ({
+        ...s,
+        // Store the public-relative path so it works when served from /public
+        url: s.url,
+      })),
+      html: {
+        path: htmlPath,
+        url: `/screenshots/${htmlPath}`,
+      },
+      metadata,
+      structure,
+      resources: {
+        images,
+        videos,
+        animations,
+        texts,
+        colors,
+        links: [],
+      },
+      sections,
+      summary: {
+        totalScreenshots: screenshots.length,
+        totalImages: images.length,
+        totalVideos: videos.length,
+        totalGifs: animations.gifs.length,
+        totalAnimations: animations.totalAnimated || 0,
+        totalTexts: texts.length,
+        totalColors: colors.length,
+        totalLinks: 0,
+        pageTitle: metadata?.title || 'Untitled',
+        language: metadata?.lang || 'en',
+        totalSections: sections.length,
+      },
+    }
+
+    const reportJsonPath = path.join(__dirname, 'public/scraping-reports', `${timestamp}`, 'report.json')
+    fs.writeFileSync(reportJsonPath, JSON.stringify(report, null, 2), 'utf-8')
+    console.log(`[Screenshot API] report.json saved → public/scraping-reports/${timestamp}/report.json`)
 
     res.json({
       success: true,
@@ -712,6 +951,7 @@ app.post('/api/screenshot', async (req, res) => {
       animations,
       texts,
       colors,
+      sections,
       url: url,
       capturedAt: new Date(timestamp).toISOString(),
     })
