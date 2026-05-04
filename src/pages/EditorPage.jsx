@@ -9,6 +9,7 @@ import { Canvas, useCanvas } from '../domains/canvas'
 import { ImportExportModal } from '../domains/editor-io'
 import { ComponentPalette } from '../domains/palette'
 import { PropertiesPanel } from '../domains/properties'
+import { BurgerMenu } from '../shared/components'
 import './EditorPage.css'
 
 const BLOCKS = [textBlock, imageBlock, carouselBlock, spacerBlock, buttonBlock]
@@ -32,6 +33,7 @@ function EditorPage() {
 
   return (
     <div className="editor-layout">
+      <BurgerMenu />
       <header className="editor-header">
         <h1 className="editor-header-title">Content Editor</h1>
         <button

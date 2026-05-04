@@ -26,12 +26,13 @@
   padding: 6px 14px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: all 0.15s;
 }
 
 .editor-io-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .editor-preview-btn {
@@ -56,6 +57,7 @@
   font-weight: 600;
   color: #fff;
   margin: 0;
+  margin-left: 56px;
   letter-spacing: 0.02em;
 }
 

@@ -1,0 +1,17 @@
+.scraping-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.scraping-page-content {
+  padding: 4rem 1rem 2rem 1rem;
+  padding-left: 5rem;
+  padding-bottom: 4rem;
+}
+
+@media (max-width: 768px) {
+  .scraping-page-content {
+    padding: 4rem 0.5rem 4rem 0.5rem;
+    padding-left: 4rem;
+  }
+}
