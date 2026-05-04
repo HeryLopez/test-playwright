@@ -29,3 +29,9 @@ dist-ssr
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Scraping reports
+/public/scraping-reports/
+
+# Kiro specs
+.kiro/specs/

@@ -1,0 +1,57 @@
+{
+  "id": "report-fixture-minimal",
+  "url": "https://minimal.example.com/",
+  "timestamp": 1746100000000,
+  "generatedAt": "2026-05-01T08:00:00.000Z",
+  "reportId": 1746100000000,
+  "metadata": {
+    "title": "Minimal Site",
+    "description": "A simple site with only text and images."
+  },
+  "resources": {
+    "images": [],
+    "videos": [],
+    "texts": [],
+    "colors": [
+      { "id": "color-0", "hex": "#333333", "rgb": "rgb(51,51,51)", "count": 100, "usage": "color" }
+    ]
+  },
+  "sections": [
+    {
+      "index": 0,
+      "type": "section",
+      "selector": "div.hero",
+      "headings": [
+        { "tag": "h1", "text": "Welcome to Minimal Site", "level": 1 }
+      ],
+      "paragraphs": [
+        "This is a simple site with clean content and no complex components."
+      ],
+      "images": [
+        { "src": "https://minimal.example.com/images/hero.jpg", "alt": "Hero image", "width": 1200, "height": 600 }
+      ],
+      "buttons": ["Get Started"],
+      "items": []
+    },
+    {
+      "index": 1,
+      "type": "section",
+      "selector": "div.about",
+      "headings": [
+        { "tag": "h2", "text": "About Us", "level": 2 }
+      ],
+      "paragraphs": [
+        "We are a small team building great products.",
+        "Our mission is to make development simpler."
+      ],
+      "images": [
+        { "src": "https://minimal.example.com/images/team.jpg", "alt": "Our team", "width": 800, "height": 400 }
+      ],
+      "buttons": [],
+      "items": []
+    }
+  ],
+  "summary": {
+    "totalSections": 2
+  }
+}

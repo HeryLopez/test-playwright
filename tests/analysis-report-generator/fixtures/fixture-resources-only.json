@@ -1,0 +1,36 @@
+{
+  "id": "report-fixture-resources-only",
+  "url": "https://resources.example.com/",
+  "timestamp": 1746200000000,
+  "generatedAt": "2026-05-02T10:00:00.000Z",
+  "reportId": 1746200000000,
+  "metadata": {
+    "title": "Resources Only Site",
+    "description": "A site where sections could not be extracted, falling back to flat resources."
+  },
+  "resources": {
+    "images": [
+      { "id": "img-0", "url": "https://resources.example.com/images/product.jpg", "alt": "Product screenshot", "category": "content", "width": 1200, "height": 800 },
+      { "id": "img-1", "url": "https://resources.example.com/images/dashboard.jpg", "alt": "Dashboard view", "category": "content", "width": 1200, "height": 800 },
+      { "id": "img-2", "url": "https://resources.example.com/images/mobile.jpg", "alt": "Mobile app", "category": "content", "width": 600, "height": 1200 }
+    ],
+    "videos": [],
+    "texts": [
+      { "id": "text-0", "content": "The Best Product Ever", "type": "heading", "tag": "h1", "context": "div.hero" },
+      { "id": "text-1", "content": "Features", "type": "heading", "tag": "h2", "context": "div.features" },
+      { "id": "text-2", "content": "Pricing", "type": "heading", "tag": "h2", "context": "div.pricing" },
+      { "id": "text-3", "content": "We help teams build better software faster with our AI-powered platform.", "type": "paragraph", "tag": "p", "context": "div.hero" },
+      { "id": "text-4", "content": "Trusted by thousands of developers at companies of all sizes.", "type": "paragraph", "tag": "p", "context": "div.social-proof" },
+      { "id": "text-5", "content": "Start your free trial today. No credit card required.", "type": "paragraph", "tag": "p", "context": "div.cta" }
+    ],
+    "colors": [
+      { "id": "color-0", "hex": "#2563eb", "rgb": "rgb(37,99,235)", "count": 400, "usage": "primary brand color" },
+      { "id": "color-1", "hex": "#1e293b", "rgb": "rgb(30,41,59)", "count": 300, "usage": "color" },
+      { "id": "color-2", "hex": "#f8fafc", "rgb": "rgb(248,250,252)", "count": 200, "usage": "background-color" }
+    ]
+  },
+  "sections": [],
+  "summary": {
+    "totalSections": 0
+  }
+}

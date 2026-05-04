@@ -1,0 +1,84 @@
+{
+  "id": "report-fixture-testimonials",
+  "url": "https://testimonials.example.com/",
+  "timestamp": 1746300000000,
+  "generatedAt": "2026-05-03T09:00:00.000Z",
+  "reportId": 1746300000000,
+  "metadata": {
+    "title": "Customer Stories",
+    "description": "See what our customers say about us."
+  },
+  "resources": {
+    "images": [],
+    "videos": [],
+    "texts": [],
+    "colors": [
+      { "id": "color-0", "hex": "#0f172a", "rgb": "rgb(15,23,42)", "count": 300, "usage": "color" }
+    ]
+  },
+  "sections": [
+    {
+      "index": 0,
+      "type": "section",
+      "selector": "div.testimonials-header",
+      "headings": [
+        { "tag": "h2", "text": "Trusted by developers worldwide", "level": 2 }
+      ],
+      "paragraphs": ["Join thousands of developers who ship faster with our tools."],
+      "images": [],
+      "buttons": [],
+      "items": []
+    },
+    {
+      "index": 1,
+      "type": "section",
+      "selector": "div.testimonial-1",
+      "headings": [],
+      "paragraphs": [
+        "This tool completely transformed how our team works. We ship features in half the time.",
+        "Jane Doe",
+        "Senior Engineer at Acme Corp"
+      ],
+      "images": [
+        { "src": "https://testimonials.example.com/images/jane-doe-avatar.png", "alt": "Jane Doe avatar", "width": 80, "height": 80 }
+      ],
+      "buttons": [],
+      "items": []
+    },
+    {
+      "index": 2,
+      "type": "section",
+      "selector": "div.testimonial-2",
+      "headings": [],
+      "paragraphs": [
+        "I was skeptical at first, but after one week I was completely sold. The AI suggestions are spot on.",
+        "John Smith",
+        "CTO at Startup Inc"
+      ],
+      "images": [
+        { "src": "https://testimonials.example.com/images/john-smith-avatar.png", "alt": "John Smith avatar", "width": 80, "height": 80 }
+      ],
+      "buttons": [],
+      "items": []
+    },
+    {
+      "index": 3,
+      "type": "section",
+      "selector": "div.testimonial-3",
+      "headings": [],
+      "paragraphs": [
+        "Best developer tool I've used in 10 years of programming. Highly recommend to any team.",
+        "Alice Johnson",
+        "Lead Developer at Tech Co"
+      ],
+      "images": [
+        { "src": "https://testimonials.example.com/images/alice-johnson-avatar.png", "alt": "Alice Johnson avatar", "width": 80, "height": 80 }
+      ],
+      "buttons": [],
+      "items": []
+    }
+  ],
+  "summary": {
+    "totalSections": 4
+  }
+}

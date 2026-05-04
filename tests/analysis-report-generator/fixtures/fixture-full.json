@@ -1,0 +1,155 @@
+{
+  "id": "report-fixture-full",
+  "url": "https://example.com/",
+  "timestamp": 1746000000000,
+  "generatedAt": "2026-04-30T12:00:00.000Z",
+  "reportId": 1746000000000,
+  "metadata": {
+    "title": "Example Product — The best tool for developers",
+    "description": "Example Product helps you build faster with AI-powered tools."
+  },
+  "resources": {
+    "images": [],
+    "videos": [
+      {
+        "id": "video-0",
+        "url": "https://example.com/videos/demo.mp4",
+        "type": "html5",
+        "width": 1920,
+        "height": 1080,
+        "poster": "https://example.com/videos/demo-poster.jpg",
+        "autoplay": true,
+        "loop": true
+      }
+    ],
+    "texts": [],
+    "colors": [
+      { "id": "color-0", "hex": "#1a1a2e", "rgb": "rgb(26,26,46)", "count": 500, "usage": "background-color" },
+      { "id": "color-1", "hex": "#e94560", "rgb": "rgb(233,69,96)", "count": 300, "usage": "primary brand color" },
+      { "id": "color-2", "hex": "#ffffff", "rgb": "rgb(255,255,255)", "count": 200, "usage": "color" }
+    ]
+  },
+  "sections": [
+    {
+      "index": 0,
+      "type": "header",
+      "selector": "nav",
+      "headings": [{ "tag": "h2", "text": "Example Product", "level": 2 }],
+      "paragraphs": [],
+      "images": [],
+      "buttons": ["Login", "Sign Up"],
+      "items": []
+    },
+    {
+      "index": 1,
+      "type": "section",
+      "selector": "div.hero",
+      "headings": [
+        { "tag": "h1", "text": "Build faster with AI-powered tools", "level": 1 },
+        { "tag": "h2", "text": "The development environment that thinks with you", "level": 2 }
+      ],
+      "paragraphs": [
+        "Example Product helps you build faster with AI-powered tools.",
+        "Trusted by over 10,000 developers worldwide."
+      ],
+      "images": [],
+      "buttons": ["Get Started Free", "Watch Demo"],
+      "items": []
+    },
+    {
+      "index": 2,
+      "type": "section",
+      "selector": "div.features",
+      "headings": [
+        { "tag": "h2", "text": "Everything you need to ship faster", "level": 2 }
+      ],
+      "paragraphs": ["Powerful features designed for modern development teams."],
+      "images": [],
+      "buttons": [],
+      "items": [
+        {
+          "headings": [{ "tag": "h3", "text": "AI Code Completion", "level": 3 }],
+          "paragraphs": ["Intelligent suggestions that understand your codebase."],
+          "images": [{ "src": "https://example.com/images/feature-ai.png", "alt": "AI completion screenshot", "width": 800, "height": 600 }],
+          "buttons": []
+        },
+        {
+          "headings": [{ "tag": "h3", "text": "Real-time Collaboration", "level": 3 }],
+          "paragraphs": ["Work together with your team in real time."],
+          "images": [{ "src": "https://example.com/images/feature-collab.png", "alt": "Collaboration screenshot", "width": 800, "height": 600 }],
+          "buttons": []
+        },
+        {
+          "headings": [{ "tag": "h3", "text": "One-click Deploy", "level": 3 }],
+          "paragraphs": ["Deploy to any cloud provider with a single click."],
+          "images": [{ "src": "https://example.com/images/feature-deploy.png", "alt": "Deploy screenshot", "width": 800, "height": 600 }],
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "type": "section",
+      "selector": "div.testimonials",
+      "headings": [
+        { "tag": "h2", "text": "Loved by developers worldwide", "level": 2 }
+      ],
+      "paragraphs": [
+        "Example Product changed how I build products. I ship 3x faster now.",
+        "The AI suggestions are incredibly accurate. It feels like pair programming.",
+        "I can't imagine going back to my old workflow."
+      ],
+      "images": [
+        { "src": "https://example.com/images/jane-doe-avatar.png", "alt": "Jane Doe avatar", "width": 80, "height": 80 },
+        { "src": "https://example.com/images/john-smith-avatar.png", "alt": "John Smith avatar", "width": 80, "height": 80 },
+        { "src": "https://example.com/images/alice-jones-avatar.png", "alt": "Alice Jones avatar", "width": 80, "height": 80 }
+      ],
+      "buttons": [],
+      "items": []
+    },
+    {
+      "index": 4,
+      "type": "section",
+      "selector": "div.faq",
+      "headings": [
+        { "tag": "h2", "text": "Common questions", "level": 2 }
+      ],
+      "paragraphs": [],
+      "images": [],
+      "buttons": [],
+      "items": [
+        {
+          "headings": [{ "tag": "h3", "text": "What is Example Product?", "level": 3 }],
+          "paragraphs": ["Example Product is an AI-powered development environment that helps you build faster."],
+          "images": [],
+          "buttons": []
+        },
+        {
+          "headings": [{ "tag": "h3", "text": "How much does it cost?", "level": 3 }],
+          "paragraphs": ["We offer a free tier and paid plans starting at $9/month."],
+          "images": [],
+          "buttons": []
+        },
+        {
+          "headings": [{ "tag": "h3", "text": "Which languages are supported?", "level": 3 }],
+          "paragraphs": ["We support JavaScript, TypeScript, Python, Go, Rust, and more."],
+          "images": [],
+          "buttons": []
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "type": "footer",
+      "selector": "footer",
+      "headings": [],
+      "paragraphs": ["© 2026 Example Product. All rights reserved."],
+      "images": [],
+      "buttons": ["Privacy Policy", "Terms of Service"],
+      "items": []
+    }
+  ],
+  "summary": {
+    "totalSections": 6
+  }
+}
